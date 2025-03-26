@@ -152,8 +152,7 @@ async function changePassword(request, response, next) {
   //   old_password: oldPassword,
   //   new_password: newPassword,
   //   confirm_new_password: confirmNewPassword,
-  // } = request.body;
-  //
+  // } = request.body;]
   // Make sure that:
   // - the user exists by checking the user ID
   // - the old password is correct
@@ -191,6 +190,46 @@ async function deleteUser(request, response, next) {
   }
 }
 
+async function loginUser(request, response) {
+  try {
+    const { email, password } = request.body;
+
+    // Email is required
+    if (!email) {
+      throw errorResponder(errorTypes.VALIDATION_ERROR, 'Email is required');
+    }
+
+    // Password is required
+    if (!password) {
+      throw errorResponder(errorTypes.VALIDATION_ERROR, 'Password is required');
+    }
+
+    // Get user's email
+    const user = await usersService.getUser(user, email);
+    if(!user){
+      return response.status(404).json({ message: 'User not found' });
+    }
+
+    // Check user's password
+    const checkPassword = await usersService.getUser(user, password);
+    if(!checkPassword){
+      return response.status(403).json({ message: 'INVALID_PASSWORD' });
+    }
+    const success = await usersService.getUser(
+      request.params.id,
+      email,
+      password
+    );
+
+    if (!success) {
+      throw errorResponder(errorTypes.UNPROCESSABLE_ENTITY, 'Failed to login');
+    }
+    return response.status(200).json({ message: 'User succesfully logged in' });
+  } catch(error) {
+    return('server error');
+  }
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -198,4 +237,5 @@ module.exports = {
   updateUser,
   changePassword,
   deleteUser,
+  loginUser
 };

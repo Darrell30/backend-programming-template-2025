@@ -27,6 +27,9 @@ async function changePassword(id, password) {
 async function deleteUser(id) {
   return Users.deleteOne({ _id: id });
 }
+async function loginUser(email, password) {
+  return Users.loginUser({ email, password });
+}
 
 module.exports = {
   getUsers,
@@ -36,4 +39,5 @@ module.exports = {
   updateUser,
   changePassword,
   deleteUser,
+  loginUser,
 };

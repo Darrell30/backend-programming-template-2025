@@ -7,6 +7,16 @@ const route = express.Router();
 module.exports = (app) => {
   app.use('/users', route);
 
+  route.get('/', (request, response) => {
+  let {offset,limit} = req.query;
+
+  offset = parseInt(offset) || 0;
+  limit = parseInt(limit) || 10;
+  });
+  
+  // Post Login of Users
+  route.post('/authentication/login', usersController.loginUser);
+
   // Get list of users
   route.get('/', usersController.getUsers);
 

@@ -7,6 +7,13 @@ const route = express.Router();
 module.exports = (app) => {
   app.use('/books', route);
 
+  route.get('/', (request, response) => {
+    let {offset,limit} = req.query;
+  
+    offset = parseInt(offset) || 0;
+    limit = parseInt(limit) || 10;
+    });
+
   // Get list of books
   route.get('/', booksController.getBooks);
 
